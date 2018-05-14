@@ -5,6 +5,7 @@ var fs =require('fs');
 var StringDecoder = require('string_decoder').StringDecoder;
 var config = require('./config');
 var _data = require('./lib/data');
+var handlers = require('./lib/handlers');
 
 //http server
 var httpServer = http.createServer(function(req, res){
@@ -72,18 +73,8 @@ var unifiedServer = function(req, res){
 	});
 };
 
-//handlers
-var handlers = {};
-
-handlers.notFound = function(data, callback){
-	callback(200);
-};
-
-handlers.ping = function(data, callback){
-	callback(404);
-};
-
 // request router
 var router = {
-	'ping': handlers.sample
+	'ping': handlers.sample,
+	'users': handlers.users
 };

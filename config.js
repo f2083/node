@@ -3,13 +3,15 @@ var environments = {};
 environments.staging = {
 	'httpPort': 3001,
 	'httpsPort': 3002,
-	'envName': 'staging' 
+	'envName': 'staging',
+	'hashingSecret':  'thisIsAsecret'
 };
 
 environments.production = {
 	'httpPort': 5001,
 	'httpsPort': 5002,
-	'envName': 'production' 
+	'envName': 'production',
+	'hashingSecret':  'thisIsAlsoAsecret' 
 };
 
 var currentEnvironment = typeof(process.env.NODE_ENV) == 'string' ?
