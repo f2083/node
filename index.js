@@ -6,6 +6,13 @@ var StringDecoder = require('string_decoder').StringDecoder;
 var config = require('./config');
 var _data = require('./lib/data');
 var handlers = require('./lib/handlers');
+var helpers = require('./lib/helpers');
+
+// request router
+var router = {
+	'ping': handlers.sample,
+	'users': handlers.users
+};
 
 //http server
 var httpServer = http.createServer(function(req, res){
@@ -45,7 +52,7 @@ var unifiedServer = function(req, res){
 		buffer += decoder.end();
 
 		//choose the handler
-		var chosenHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : handlers.notFound;
+		var chosenHandler = router[trimmedPath] ? router[trimmedPath] : handlers.notFound;
 
 		//construct data obj
 		var data = {
@@ -53,11 +60,10 @@ var unifiedServer = function(req, res){
 			'method': method,
 			'queryStringObj': queryStringObj,
 			'headers': headers,
-			'payload': buffer
+			'payload': helpers.parseJsonToObject(buffer)
 		};
 
 		//route the request
-
 		chosenHandler(data, function(statusCode, payload){
 			statusCode = typeof(statusCode) === 'number' ? statusCode : 200;
 			payload = typeof(payload) === 'object' ? payload : {};
@@ -73,8 +79,3 @@ var unifiedServer = function(req, res){
 	});
 };
 
-// request router
-var router = {
-	'ping': handlers.sample,
-	'users': handlers.users
-};
