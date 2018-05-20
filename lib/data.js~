@@ -1,5 +1,6 @@
 var fs = require('fs');
 var path = require('path');
+var helpers = require('./helpers');
 
 var lib ={};
 
@@ -27,6 +28,7 @@ lib.create = function(dir, file, data, callback) {
 				}
 			});
 		} else {
+			console.log(err)
 			callback('Could not create new file, it may allready exist');
 		}
 	});
@@ -34,6 +36,11 @@ lib.create = function(dir, file, data, callback) {
 
 lib.read = function(dir, file, callback){
 	fs.readFile(lib.baseDir + dir + '/' + file + '.json', 'utf8', function(err, data){
+		if (!err && data) {
+			console.log(helpers);
+			var parsedData = helpers.parseJsonToObj(data);
+			callback(false, parsedData);
+		}
 		callback(err, data);
 	});
 };
